@@ -1,0 +1,39 @@
+            
+
+
+            string endPoint = string.Format("http://projetopim.somee.com/api/veiculo");
+            WebRequest request = WebRequest.Create(endPoint);
+            request.Method = "GET";
+            WebResponse response = null;
+            response = (HttpWebResponse)request.GetResponse();
+
+            string responseObj = null;
+            using (Stream responseStream = response.GetResponseStream())
+            {
+                using(StreamReader reader = new StreamReader(responseStream))
+                {
+                    responseObj = reader.ReadToEnd();
+                    reader.Close();
+                }
+            }
+
+            string endPointPost = string.Format("http://projetopim.somee.com/api/veiculo");
+            WebRequest requestObj = WebRequest.Create(endPointPost);
+            requestObj.Method = "POST";
+            requestObj.ContentType = "application/json";
+
+            string postData = "{\"Marca\":\"Volkswagen\",\"Modelo\":\"Gol\",\"DataInicio\":\"11/02/2019\",\"DataFim\":\"11/06/2019\",\"Dias\":\"4\"}";
+
+            using(var streamWriter = new StreamWriter(requestObj.GetRequestStream()))
+            {
+                streamWriter.Write(postData);
+                streamWriter.Flush();
+                streamWriter.Close();
+
+                var httpResponse = (HttpWebResponse)requestObj.GetResponse();
+
+                using(var streamReader = new StreamReader(httpResponse.GetResponseStream()))
+                {
+                    var result = streamReader.ReadToEnd();  
+                }
+            }
